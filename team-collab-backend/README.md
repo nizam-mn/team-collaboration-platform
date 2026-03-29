@@ -1,100 +1,209 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🚀 Team Collaboration Platform (Mini Trello + Notion Hybrid)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A full-stack team collaboration platform where users can manage projects, tasks, and notes.
+Built as part of a full-stack developer screening task to demonstrate real-world backend architecture, authentication, and scalable system design.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## 🧱 Tech Stack
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### Backend
 
-## Project setup
+* NestJS (Node.js framework)
+* PostgreSQL (Relational Database)
+* Drizzle ORM (Type-safe ORM)
+
+### Authentication
+
+* JWT (JSON Web Token)
+* Bcrypt (Password hashing)
+
+---
+
+## ✨ Features
+
+### 🔐 Authentication
+
+* User Signup
+* User Login
+* JWT-based authentication
+* Protected routes using guards
+* Secure password hashing with bcrypt
+
+---
+
+### 📁 Projects
+
+* Create a project
+* View all projects belonging to the logged-in user
+* Delete a project
+* User-based authorization (users can only access their own projects)
+
+---
+
+### 📌 Tasks
+
+* Create tasks within a project
+* Task fields:
+
+  * Title
+  * Description
+  * Status (Todo / In Progress / Done)
+  * Due Date
+* Update task status
+* Delete tasks
+* Filter tasks by status
+
+---
+
+### 📝 Notes (Planned)
+
+* Add notes to each project
+* Full CRUD operations
+
+---
+
+## 🗄️ Database Design
+
+Relational schema using PostgreSQL:
+
+### Tables
+
+* Users
+* Projects
+* Tasks
+* Notes
+
+### Relationships
+
+* User → Projects (1:N)
+* Project → Tasks (1:N)
+* Project → Notes (1:N)
+
+### Features
+
+* Foreign key constraints
+* Cascade delete (maintains data integrity)
+* Enum for task status
+* Timestamps (createdAt, updatedAt)
+
+---
+
+## ⚙️ Setup Instructions
+
+### 1. Clone the repository
 
 ```bash
-$ npm install
+git clone https://github.com/YOUR_USERNAME/team-collaboration-platform.git
+cd team-collaboration-platform
 ```
 
-## Compile and run the project
+---
+
+### 2. Install dependencies
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Run tests
+---
+
+### 3. Setup environment variables
+
+Create a `.env` file in the root directory:
+
+```env
+DATABASE_URL=postgresql://postgres:password@localhost:5432/team_collab
+JWT_SECRET=your_secret_key
+```
+
+---
+
+### 4. Run database migrations
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm run db:generate
+npm run db:migrate
 ```
 
-## Deployment
+---
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 5. Start the development server
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm run start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+---
 
-## Resources
+## 🔐 API Endpoints
 
-Check out a few resources that may come in handy when working with NestJS:
+### Authentication
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+* `POST /api/auth/signup`
+* `POST /api/auth/login`
 
-## Support
+---
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Projects
 
-## Stay in touch
+* `POST /api/projects` → Create project
+* `GET /api/projects` → Get user projects
+* `DELETE /api/projects/:id` → Delete project
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+---
 
-## License
+### Tasks
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+* `POST /api/tasks/:projectId` → Create task
+* `GET /api/tasks/:projectId` → Get tasks (optional filter: `?status=todo`)
+* `PATCH /api/tasks/:taskId/status` → Update status
+* `DELETE /api/tasks/:taskId` → Delete task
 
-{"access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoidGVzdEBtYWlsLmNvbSIsImlhdCI6MTc3NDcyNTg5MCwiZXhwIjoxNzc0ODEyMjkwfQ.fyEfl3sv88XxD4tUO3PdQ96lovWw7Azc90HUyHvkn9k"}
+---
+
+## 🔒 Security & Authorization
+
+* JWT-based authentication for all protected routes
+* Passwords are hashed using bcrypt
+* User-level authorization enforced at query level
+* Users cannot access or modify other users’ data
+
+---
+
+## 🧠 Key Design Decisions
+
+* Modular architecture using NestJS (Auth, Users, Projects, Tasks)
+* Separation of concerns (Controller → Service → Database)
+* Drizzle ORM used for type-safe SQL queries
+* DTO-based validation using class-validator
+* Global validation pipe for request sanitization
+* Clean and scalable folder structure
+
+---
+
+## 📈 Future Improvements
+
+* Pagination for tasks (bonus feature)
+* Search and advanced filtering
+* Drag-and-drop Kanban board
+* Notes module implementation
+* Frontend (React + Vite)
+
+---
+
+## 📊 Evaluation Focus
+
+This project is designed with emphasis on:
+
+* Clean and maintainable code
+* Scalable backend architecture
+* Secure authentication and authorization
+* Proper database design and relationships
+* Real-world API design and error handling
+
+---
+
+## 👨‍💻 Author
+
+Mohammed Nizam
