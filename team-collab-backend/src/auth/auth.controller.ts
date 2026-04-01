@@ -1,18 +1,67 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignupDto, LoginDto } from './auth.dto';
+import type { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('signup')
-  signup(@Body() body: SignupDto) {
-    return this.authService.signup(body.email, body.password);
+  async signup(
+    @Body() body: SignupDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const result = await this.authService.signup(body.email, body.password);
+
+    // res.cookie('token', result.access_token, {
+    //   httpOnly: true,
+    //   secure: false,
+    //   sameSite: 'none',
+    //   maxAge: 1000 * 60 * 60 * 24, // 1 day
+    // });
+
+    res.cookie('token', result.access_token, {
+      httpOnly: true,
+      secure: false, // ✅ must be false for localhost
+      sameSite: 'lax', // ✅ works on localhost
+      maxAge: 1000 * 60 * 60 * 24,
+    });
+
+    return { message: 'Signup successful' };
   }
 
   @Post('login')
-  login(@Body() body: LoginDto) {
-    return this.authService.login(body.email, body.password);
+  async login(
+    @Body() body: LoginDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const result = await this.authService.login(body.email, body.password);
+
+    // res.cookie('token', result.access_token, {
+    //   httpOnly: true,
+    //   secure: false,
+    //   sameSite: 'none',
+    //   maxAge: 1000 * 60 * 60 * 24, // 1 day
+    // });
+
+    res.cookie('token', result.access_token, {
+      httpOnly: true,
+      secure: false, // ✅ must be false for localhost
+      sameSite: 'lax', // ✅ works on localhost
+      maxAge: 1000 * 60 * 60 * 24,
+    });
+
+    return { message: 'Login successful' };
+  }
+
+  @Post('logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+    });
+    return { message: 'Logged out successfully' };
   }
 }

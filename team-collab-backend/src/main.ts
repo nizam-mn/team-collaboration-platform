@@ -1,13 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // Enable CORS (frontend connection)
   app.enableCors({
-    origin: '*', // later restrict to frontend URL
+    origin: 'http://localhost:5173', // later restrict to frontend URL
     credentials: true,
   });
 
@@ -22,6 +23,8 @@ async function bootstrap() {
 
   // Global prefix (clean API structure)
   app.setGlobalPrefix('api');
+
+  app.use(cookieParser());
 
   await app.listen(process.env.PORT ?? 3000);
 }

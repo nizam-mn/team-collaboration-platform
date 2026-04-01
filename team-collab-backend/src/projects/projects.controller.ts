@@ -28,6 +28,14 @@ export class ProjectsController {
     return this.projectsService.getUserProjects(req.user.sub);
   }
 
+  @Get(':id')
+getProject(
+  @Param('id', ParseIntPipe) id: number,
+  @Req() req,
+) {
+  return this.projectsService.getProjectById(id, req.user.sub);
+}
+
   @Delete(':id')
   delete(@Param('id', ParseIntPipe) id: number, @Req() req) {
     return this.projectsService.deleteProject(id, req.user.sub);

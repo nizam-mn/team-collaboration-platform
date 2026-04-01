@@ -21,6 +21,24 @@ export class ProjectsService {
     return db.select().from(projects).where(eq(projects.userId, userId));
   }
 
+  async getProjectById(id: number, userId: number) {
+  const project = await db
+    .select()
+    .from(projects)
+    .where(
+      and(
+        eq(projects.id, id),
+        eq(projects.userId, userId),
+      ),
+    );
+
+  if (!project.length) {
+    throw new NotFoundException("Project not found");
+  }
+
+  return project[0];
+}
+
   async deleteProject(projectId: number, userId: number) {
     const result = await db
       .delete(projects)
