@@ -14,7 +14,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signup(email: string, password: string) {
+  async signup(username: string, email: string, password: string) {
     const existingUser = await this.usersService.findByEmail(email);
 
     if (existingUser) {
@@ -23,7 +23,7 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await this.usersService.createUser(email, hashedPassword);
+    const user = await this.usersService.createUser(username, email, hashedPassword);
 
     return this.generateToken(user.id, user.email);
   }

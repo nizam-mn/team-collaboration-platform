@@ -12,7 +12,7 @@ export class AuthController {
     @Body() body: SignupDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const result = await this.authService.signup(body.email, body.password);
+    const result = await this.authService.signup(body.username, body.email, body.password);
 
     // res.cookie('token', result.access_token, {
     //   httpOnly: true,

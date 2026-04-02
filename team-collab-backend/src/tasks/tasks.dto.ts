@@ -8,7 +8,7 @@ export enum TaskStatus {
 
 export class CreateTaskDto {
   @IsString()
-  title: string;
+  title!: string;
 
   @IsOptional()
   @IsString()
@@ -25,5 +25,5 @@ export class CreateTaskDto {
 
 export class UpdateTaskStatusDto {
   @IsEnum(TaskStatus)
-  status: TaskStatus;
+  status!: TaskStatus;
 }

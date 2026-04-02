@@ -17,7 +17,7 @@ export const taskStatusEnum = pgEnum("task_status", [
 // USERS
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
-
+  username: text("username").notNull(),
   email: text("email").notNull().unique(),
 
   password: text("password").notNull(),

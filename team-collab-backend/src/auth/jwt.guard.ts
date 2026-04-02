@@ -13,7 +13,7 @@ export class JwtAuthGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
 
-    const token = request.cookies?.token; // ✅ from cookie
+    const token = request.cookies?.token;
 
     if (!token) {
       throw new UnauthorizedException('No token');
