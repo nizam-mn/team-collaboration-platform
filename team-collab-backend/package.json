@@ -18,8 +18,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate"
+    "db:migrate": "dotenv -e .env -- drizzle-kit migrate",
+    "db:generate": "dotenv -e .env -- drizzle-kit generate"
   },
   "dependencies": {
     "@nestjs/cli": "^11.0.17",
@@ -33,6 +33,7 @@
     "class-validator": "^0.15.1",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.3.1",
+    "dotenv-cli": "^11.0.0",
     "drizzle-orm": "^0.45.1",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
