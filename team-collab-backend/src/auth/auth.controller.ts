@@ -12,7 +12,11 @@ export class AuthController {
     @Body() body: SignupDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const result = await this.authService.signup(body.username, body.email, body.password);
+    const result = await this.authService.signup(
+      body.username,
+      body.email,
+      body.password,
+    );
 
     // res.cookie('token', result.access_token, {
     //   httpOnly: true,
@@ -21,10 +25,17 @@ export class AuthController {
     //   maxAge: 1000 * 60 * 60 * 24, // 1 day
     // });
 
+    // res.cookie('token', result.access_token, {
+    //   httpOnly: true,
+    //   secure: false, // ✅ must be false for localhost
+    //   sameSite: 'lax', // ✅ works on localhost
+    //   maxAge: 1000 * 60 * 60 * 24,
+    // });
+
     res.cookie('token', result.access_token, {
       httpOnly: true,
-      secure: false, // ✅ must be false for localhost
-      sameSite: 'lax', // ✅ works on localhost
+      secure: process.env.NODE_ENV === 'production', // ✅ IMPORTANT
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       maxAge: 1000 * 60 * 60 * 24,
     });
 
@@ -45,10 +56,17 @@ export class AuthController {
     //   maxAge: 1000 * 60 * 60 * 24, // 1 day
     // });
 
+    // res.cookie('token', result.access_token, {
+    //   httpOnly: true,
+    //   secure: false, // ✅ must be false for localhost
+    //   sameSite: 'lax', // ✅ works on localhost
+    //   maxAge: 1000 * 60 * 60 * 24,
+    // });
+
     res.cookie('token', result.access_token, {
       httpOnly: true,
-      secure: false, // ✅ must be false for localhost
-      sameSite: 'lax', // ✅ works on localhost
+      secure: process.env.NODE_ENV === 'production', // ✅ IMPORTANT
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       maxAge: 1000 * 60 * 60 * 24,
     });
 
