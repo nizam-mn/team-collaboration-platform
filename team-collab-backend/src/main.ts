@@ -8,7 +8,7 @@ async function bootstrap() {
 
   // Enable CORS (frontend connection)
   app.enableCors({
-    origin: ['http://localhost:5173', "https://team-collaboration-platform-opal.vercel.app",],
+    origin: ["https://team-collaboration-platform-opal.vercel.app",],
     credentials: true,
   });
 

@@ -15,6 +15,14 @@ function App() {
                 <Navbar />
 				<Routes>
 					<Route
+						path="/"
+						element={
+							<PublicRoute>
+								<Auth />
+							</PublicRoute>
+						}
+					/>
+					<Route
 						path="/auth"
 						element={
 							<PublicRoute>
