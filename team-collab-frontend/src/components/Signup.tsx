@@ -46,7 +46,7 @@ export default function Signup() {
 				className="bg-gray-900 text-white px-3 py-2.5 rounded-md hover:bg-gray-900/92 transition font-medium focus:outline-none"
 				onClick={handleSubmit}
 			>
-				Login
+				Signup
 			</button>
 		</div>
 	);
