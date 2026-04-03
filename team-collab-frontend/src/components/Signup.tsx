@@ -25,7 +25,7 @@ export default function Signup() {
 		<div className="flex flex-col gap-4">
 			<input
 				className="bg-white p-3 py-2 rounded-md border border-gray-400 focus:outline-none focus:ring focus:ring-gray-500"
-				placeholder="Email"
+				placeholder="Name"
 				onChange={(e) => setUsername(e.target.value)}
 			/>
 			
