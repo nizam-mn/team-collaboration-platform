@@ -1,15 +1,17 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { db } from '../database/db';
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
+import { DB_PROVIDER } from '../database/database.module';
+import type { DatabaseType } from '../database/database.module';
 import { notes, projects } from '../database/schema';
 import { eq, and } from 'drizzle-orm';
 
 @Injectable()
 export class NotesService {
+  constructor(@Inject(DB_PROVIDER) private db: DatabaseType) {}
 
   // ✅ Create Note
   async createNote(content: string, projectId: number, userId: number) {
     // Ensure project belongs to user
-    const project = await db
+    const project = await this.db
       .select()
       .from(projects)
       .where(
@@ -23,7 +25,7 @@ export class NotesService {
       throw new NotFoundException('Project not found');
     }
 
-    const result = await db
+    const result = await this.db
       .insert(notes)
       .values({
         content,
@@ -36,7 +38,7 @@ export class NotesService {
 
   // ✅ Get Notes
   async getNotes(projectId: number, userId: number) {
-    const project = await db
+    const project = await this.db
       .select()
       .from(projects)
       .where(
@@ -50,7 +52,7 @@ export class NotesService {
       throw new NotFoundException('Project not found');
     }
 
-    return db
+    return this.db
       .select()
       .from(notes)
       .where(eq(notes.projectId, projectId));
@@ -58,7 +60,7 @@ export class NotesService {
 
   // 🔐 Update Note (with ownership check)
   async updateNote(noteId: number, content: string, userId: number) {
-    const note = await db
+    const note = await this.db
       .select()
       .from(notes)
       .innerJoin(projects, eq(notes.projectId, projects.id))
@@ -73,7 +75,7 @@ export class NotesService {
       throw new NotFoundException('Note not found or not authorized');
     }
 
-    const result = await db
+    const result = await this.db
       .update(notes)
       .set({ content })
       .where(eq(notes.id, noteId))
@@ -84,7 +86,7 @@ export class NotesService {
 
   // 🔐 Delete Note
   async deleteNote(noteId: number, userId: number) {
-    const note = await db
+    const note = await this.db
       .select()
       .from(notes)
       .innerJoin(projects, eq(notes.projectId, projects.id))
@@ -99,7 +101,7 @@ export class NotesService {
       throw new NotFoundException('Note not found or not authorized');
     }
 
-    await db.delete(notes).where(eq(notes.id, noteId));
+    await this.db.delete(notes).where(eq(notes.id, noteId));
 
     return { message: 'Note deleted successfully' };
   }

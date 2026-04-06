@@ -1,44 +1,51 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createProject, deleteProject, getProjects } from "../api/projects";
 import { FiTrash2 } from "react-icons/fi";
+import { useAuth } from "../context/AuthContext";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function Dashboard() {
-	const [projects, setProjects] = useState<any[]>([]);
 	const [name, setName] = useState("");
 	const navigate = useNavigate();
+	const { user } = useAuth();
+	const queryClient = useQueryClient();
 
 	const [showCreateCard, setShowCreateCard] = useState(false);
 
-	const fetchProjects = async () => {
-		try {
-			const res = await getProjects();
-			setProjects(res);
-		} catch {
-			console.error("Failed to fetch projects");
-		}
-	};
+	const { data: projects = [], isLoading } = useQuery({
+		queryKey: ["projects"],
+		queryFn: getProjects,
+	});
 
-	const handleCreate = async () => {
-		if (!name.trim()) return;
-
-		try {
-			await createProject(name);
+	const createMutation = useMutation({
+		mutationFn: (newName: string) => createProject(newName),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["projects"] });
 			setName("");
-			fetchProjects();
-		} catch {
+			setShowCreateCard(false);
+		},
+		onError: () => {
 			alert("Failed to create project");
-		}
+		},
+	});
+
+	const deleteMutation = useMutation({
+		mutationFn: (id: number) => deleteProject(id),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["projects"] });
+		},
+	});
+
+	const handleCreate = () => {
+		if (!name.trim()) return;
+		createMutation.mutate(name);
 	};
 
-	const handleDelete = async (id: number) => {
-		await deleteProject(id);
-		fetchProjects();
+	const handleDelete = (e: React.MouseEvent, id: number) => {
+		e.stopPropagation();
+		deleteMutation.mutate(id);
 	};
-
-	useEffect(() => {
-		fetchProjects();
-	}, []);
 
 	return (
 		<div className="min-h-scree px-6 py-10">
@@ -47,9 +54,11 @@ export default function Dashboard() {
 				<div className="flex items-center justify-between mb-8">
 					<div>
 						<h1 className="text-3xl font-semibold text-gray-900">Dashboard</h1>
-						{/* <p className="text-gray-500 text-sm mt-1">
-							Manage your projects and tasks
-						</p> */}
+						{user && (
+							<p className="text-gray-500 text-sm mt-1">
+								Welcome back, {user.username}!
+							</p>
+						)}
 					</div>
 				</div>
 				
@@ -81,21 +90,24 @@ export default function Dashboard() {
 							/>
 							<button
 								onClick={handleCreate}
-								className="bg-gray-900 text-white px-5 py-2 rounded-md hover:bg-gray-800 transition font-medium"
+								disabled={createMutation.isPending}
+								className="bg-gray-900 text-white px-5 py-2 rounded-md hover:bg-gray-800 transition font-medium disabled:opacity-50"
 							>
-								Create
+								{createMutation.isPending ? "Creating..." : "Create"}
 							</button>
 						</div>
 					</div>
 				)}
 
-					{projects.length === 0 ? (
+					{isLoading ? (
+						<div className="text-center text-gray-500 py-10">Loading projects...</div>
+					) : projects.length === 0 ? (
 						<div className="bg-white border border-dashed border-gray-300 rounded-lg p-6 text-center text-gray-500">
 							No projects yet. Create your first project
 						</div>
 					) : (
 						<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-							{projects.map((p) => (
+							{projects.map((p: any) => (
 								<div
 									key={p.id}
 									onClick={() => navigate(`/project/${p.id}`)}
@@ -116,7 +128,10 @@ export default function Dashboard() {
 										</p>
 									</div>
 									<div>
-										<button onClick={() => handleDelete(p.id)}>
+										<button 
+											onClick={(e) => handleDelete(e, p.id)}
+											disabled={deleteMutation.isPending && deleteMutation.variables === p.id}
+										>
 											<FiTrash2 color="red" />
 										</button>
 									</div>
