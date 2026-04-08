@@ -41,12 +41,12 @@ export default function Tasks({ projectId }: any) {
 		fetchTasks();
 	};
 
-	const handleStatus = async (id: number, status: string) => {
+	const handleStatus = async (id: string, status: string) => {
 		await updateTaskStatus(id, status);
 		fetchTasks();
 	};
 
-	const handleDelete = async (id: number) => {
+	const handleDelete = async (id: string) => {
 		await deleteTask(id);
 		fetchTasks();
 	};

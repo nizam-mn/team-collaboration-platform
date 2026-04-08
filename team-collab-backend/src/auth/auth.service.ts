@@ -44,7 +44,7 @@ export class AuthService {
     return this.generateToken(user.id, user.email);
   }
 
-  private generateToken(userId: number, email: string) {
+  private generateToken(userId: string, email: string) {
     const payload = { sub: userId, email };
 
     return {

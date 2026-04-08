@@ -7,7 +7,7 @@ import {
   Param,
   Req,
   UseGuards,
-  ParseIntPipe,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { CreateProjectDto } from './projects.dto';
@@ -30,14 +30,14 @@ export class ProjectsController {
 
   @Get(':id')
 getProject(
-  @Param('id', ParseIntPipe) id: number,
+  @Param('id', ParseUUIDPipe) id: string,
   @Req() req,
 ) {
   return this.projectsService.getProjectById(id, req.user.sub);
 }
 
   @Delete(':id')
-  delete(@Param('id', ParseIntPipe) id: number, @Req() req) {
+  delete(@Param('id', ParseUUIDPipe) id: string, @Req() req) {
     return this.projectsService.deleteProject(id, req.user.sub);
   }
 }

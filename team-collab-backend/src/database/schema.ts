@@ -1,29 +1,28 @@
 import {
   pgTable,
-  serial,
+  uuid,
   text,
-  integer,
   timestamp,
   pgEnum,
   index,
-} from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
+} from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
 
 // ENUMS
-export const taskStatusEnum = pgEnum("task_status", [
-  "todo",
-  "in_progress",
-  "done",
+export const taskStatusEnum = pgEnum('task_status', [
+  'todo',
+  'in_progress',
+  'done',
 ]);
 
 // USERS
-export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
-  username: text("username").notNull(),
-  email: text("email").notNull().unique(),
-  password: text("password").notNull(),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
+export const users = pgTable('users', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  username: text('username').notNull(),
+  email: text('email').notNull().unique(),
+  password: text('password').notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -31,16 +30,20 @@ export const usersRelations = relations(users, ({ many }) => ({
 }));
 
 // PROJECTS
-export const projects = pgTable("projects", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  userId: integer("user_id")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at").defaultNow(),
-}, (table) => ({
-  userIdIdx: index("projects_user_id_idx").on(table.userId),
-}));
+export const projects = pgTable(
+  'projects',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    name: text('name').notNull(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    createdAt: timestamp('created_at').defaultNow(),
+  },
+  (table) => ({
+    userIdIdx: index('projects_user_id_idx').on(table.userId),
+  }),
+);
 
 export const projectsRelations = relations(projects, ({ one, many }) => ({
   user: one(users, {
@@ -52,19 +55,23 @@ export const projectsRelations = relations(projects, ({ one, many }) => ({
 }));
 
 // TASKS
-export const tasks = pgTable("tasks", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  description: text("description"),
-  status: taskStatusEnum("status").default("todo"),
-  projectId: integer("project_id")
-    .notNull()
-    .references(() => projects.id, { onDelete: "cascade" }),
-  dueDate: timestamp("due_date"),
-  createdAt: timestamp("created_at").defaultNow(),
-}, (table) => ({
-  projectIdIdx: index("tasks_project_id_idx").on(table.projectId),
-}));
+export const tasks = pgTable(
+  'tasks',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    title: text('title').notNull(),
+    description: text('description'),
+    status: taskStatusEnum('status').default('todo'),
+    projectId: uuid('project_id')
+      .notNull()
+      .references(() => projects.id, { onDelete: 'cascade' }),
+    dueDate: timestamp('due_date'),
+    createdAt: timestamp('created_at').defaultNow(),
+  },
+  (table) => ({
+    projectIdIdx: index('tasks_project_id_idx').on(table.projectId),
+  }),
+);
 
 export const tasksRelations = relations(tasks, ({ one }) => ({
   project: one(projects, {
@@ -74,16 +81,20 @@ export const tasksRelations = relations(tasks, ({ one }) => ({
 }));
 
 // NOTES
-export const notes = pgTable("notes", {
-  id: serial("id").primaryKey(),
-  content: text("content"),
-  projectId: integer("project_id")
-    .notNull()
-    .references(() => projects.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at").defaultNow(),
-}, (table) => ({
-  projectIdIdx: index("notes_project_id_idx").on(table.projectId),
-}));
+export const notes = pgTable(
+  'notes',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    content: text('content'),
+    projectId: uuid('project_id')
+      .notNull()
+      .references(() => projects.id, { onDelete: 'cascade' }),
+    createdAt: timestamp('created_at').defaultNow(),
+  },
+  (table) => ({
+    projectIdIdx: index('notes_project_id_idx').on(table.projectId),
+  }),
+);
 
 export const notesRelations = relations(notes, ({ one }) => ({
   project: one(projects, {

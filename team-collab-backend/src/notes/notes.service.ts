@@ -9,7 +9,7 @@ export class NotesService {
   constructor(@Inject(DB_PROVIDER) private db: DatabaseType) {}
 
   // ✅ Create Note
-  async createNote(content: string, projectId: number, userId: number) {
+  async createNote(content: string, projectId: string, userId: string) {
     // Ensure project belongs to user
     const project = await this.db
       .select()
@@ -37,7 +37,7 @@ export class NotesService {
   }
 
   // ✅ Get Notes
-  async getNotes(projectId: number, userId: number) {
+  async getNotes(projectId: string, userId: string) {
     const project = await this.db
       .select()
       .from(projects)
@@ -59,7 +59,7 @@ export class NotesService {
   }
 
   // 🔐 Update Note (with ownership check)
-  async updateNote(noteId: number, content: string, userId: number) {
+  async updateNote(noteId: string, content: string, userId: string) {
     const note = await this.db
       .select()
       .from(notes)
@@ -85,7 +85,7 @@ export class NotesService {
   }
 
   // 🔐 Delete Note
-  async deleteNote(noteId: number, userId: number) {
+  async deleteNote(noteId: string, userId: string) {
     const note = await this.db
       .select()
       .from(notes)

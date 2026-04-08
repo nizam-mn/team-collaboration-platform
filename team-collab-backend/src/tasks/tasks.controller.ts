@@ -9,7 +9,7 @@ import {
   Req,
   UseGuards,
   Query,
-  ParseIntPipe,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto, TaskStatus, UpdateTaskStatusDto } from './tasks.dto';
@@ -22,7 +22,7 @@ export class TasksController {
 
   @Post(':projectId')
   create(
-    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('projectId', ParseUUIDPipe) projectId: string,
     @Body() body: CreateTaskDto,
     @Req() req,
   ) {
@@ -31,7 +31,7 @@ export class TasksController {
 
   @Get(':projectId')
   getTasks(
-    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('projectId', ParseUUIDPipe) projectId: string,
     @Req() req,
     @Query('status') status?: string,
     @Query('limit') limit?: string,
@@ -48,7 +48,7 @@ export class TasksController {
 
   @Patch(':taskId/status')
   updateStatus(
-    @Param('taskId', ParseIntPipe) taskId: number,
+    @Param('taskId', ParseUUIDPipe) taskId: string,
     @Body() body: UpdateTaskStatusDto,
     @Req() req,
   ) {
@@ -56,7 +56,7 @@ export class TasksController {
   }
 
   @Delete(':taskId')
-  delete(@Param('taskId', ParseIntPipe) taskId: number, @Req() req) {
+  delete(@Param('taskId', ParseUUIDPipe) taskId: string, @Req() req) {
     return this.tasksService.deleteTask(taskId, req.user.sub);
   }
 }

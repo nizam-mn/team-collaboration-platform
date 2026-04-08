@@ -6,7 +6,7 @@ export const getProjects = async () => {
   return res.data;
 };
 
-export const getProjectById = async (id: number) => {
+export const getProjectById = async (id: string) => {
   const res = await api.get(`/projects/${id}`);
   return res.data;
 };
@@ -18,7 +18,7 @@ export const createProject = async (name: string) => {
 };
 
 // ✅ Delete project (optional for later)
-export const deleteProject = async (id: number) => {
+export const deleteProject = async (id: string) => {
   const res = await api.delete(`/projects/${id}`);
   return res.data;
 };

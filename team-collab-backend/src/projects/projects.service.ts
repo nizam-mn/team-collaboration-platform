@@ -8,7 +8,7 @@ import { and, eq } from 'drizzle-orm';
 export class ProjectsService {
   constructor(@Inject(DB_PROVIDER) private db: DatabaseType) {}
 
-  async createProject(name: string, userId: number) {
+  async createProject(name: string, userId: string) {
     const result = await this.db
       .insert(projects)
       .values({
@@ -20,11 +20,11 @@ export class ProjectsService {
     return result[0];
   }
 
-  async getUserProjects(userId: number) {
+  async getUserProjects(userId: string) {
     return this.db.select().from(projects).where(eq(projects.userId, userId));
   }
 
-  async getProjectById(id: number, userId: number) {
+  async getProjectById(id: string, userId: string) {
   const project = await this.db
     .select()
     .from(projects)
@@ -42,7 +42,7 @@ export class ProjectsService {
   return project[0];
 }
 
-  async deleteProject(projectId: number, userId: number) {
+  async deleteProject(projectId: string, userId: string) {
     const result = await this.db
       .delete(projects)
       .where(

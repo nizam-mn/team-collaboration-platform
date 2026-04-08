@@ -9,7 +9,7 @@ import { TaskStatus, CreateTaskDto } from './tasks.dto';
 export class TasksService {
   constructor(@Inject(DB_PROVIDER) private db: DatabaseType) {}
 
-  async createTask(data: CreateTaskDto, projectId: number, userId: number) {
+  async createTask(data: CreateTaskDto, projectId: string, userId: string) {
     // Ensure project belongs to user
     const project = await this.db
       .select()
@@ -35,8 +35,8 @@ export class TasksService {
   }
 
   async getTasks(
-    projectId: number,
-    userId: number,
+    projectId: string,
+    userId: string,
     status?: TaskStatus,
     limit = 10,
     offset = 0,
@@ -65,7 +65,7 @@ export class TasksService {
       .offset(offset);
   }
 
-  async updateStatus(taskId: number, status: TaskStatus, userId: number) {
+  async updateStatus(taskId: string, status: TaskStatus, userId: string) {
     // Step 1: Check ownership via join
     const task = await this.db
       .select()
@@ -86,7 +86,7 @@ export class TasksService {
     return result[0];
   }
 
-  async deleteTask(taskId: number, userId: number) {
+  async deleteTask(taskId: string, userId: string) {
     // Step 1: Check ownership
     const task = await this.db
       .select()

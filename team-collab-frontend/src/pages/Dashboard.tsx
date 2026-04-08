@@ -31,7 +31,7 @@ export default function Dashboard() {
 	});
 
 	const deleteMutation = useMutation({
-		mutationFn: (id: number) => deleteProject(id),
+		mutationFn: (id: string) => deleteProject(id),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["projects"] });
 		},
@@ -42,7 +42,7 @@ export default function Dashboard() {
 		createMutation.mutate(name);
 	};
 
-	const handleDelete = (e: React.MouseEvent, id: number) => {
+	const handleDelete = (e: React.MouseEvent, id: string) => {
 		e.stopPropagation();
 		deleteMutation.mutate(id);
 	};

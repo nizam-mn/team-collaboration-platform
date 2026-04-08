@@ -8,7 +8,7 @@ import {
   Body,
   Req,
   UseGuards,
-  ParseIntPipe,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { NotesService } from './notes.service';
 import { CreateNoteDto } from './notes.dto';
@@ -21,7 +21,7 @@ export class NotesController {
 
   @Post(':projectId')
   create(
-    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('projectId', ParseUUIDPipe) projectId: string,
     @Body() body: CreateNoteDto,
     @Req() req,
   ) {
@@ -34,7 +34,7 @@ export class NotesController {
 
   @Get(':projectId')
   getAll(
-    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('projectId', ParseUUIDPipe) projectId: string,
     @Req() req,
   ) {
     return this.notesService.getNotes(
@@ -45,7 +45,7 @@ export class NotesController {
 
   @Patch(':noteId')
   update(
-    @Param('noteId', ParseIntPipe) noteId: number,
+    @Param('noteId', ParseUUIDPipe) noteId: string,
     @Body() body: CreateNoteDto,
     @Req() req,
   ) {
@@ -58,7 +58,7 @@ export class NotesController {
 
   @Delete(':noteId')
   delete(
-    @Param('noteId', ParseIntPipe) noteId: number,
+    @Param('noteId', ParseUUIDPipe) noteId: string,
     @Req() req,
   ) {
     return this.notesService.deleteNote(

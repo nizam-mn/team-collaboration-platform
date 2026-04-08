@@ -6,7 +6,7 @@ export default function Notes({ projectId }: any) {
 	const [content, setContent] = useState("");
 
 	const [showCreateCard, setShowCreateCard] = useState(false);
-	const [editingId, setEditingId] = useState<number | null>(null);
+	const [editingId, setEditingId] = useState<string | null>(null);
 	const [editContent, setEditContent] = useState("");
 
 	const fetchNotes = async () => {
@@ -22,7 +22,7 @@ export default function Notes({ projectId }: any) {
 		fetchNotes();
 	};
 
-	const handleDelete = async (id: number) => {
+	const handleDelete = async (id: string) => {
 		await deleteNote(id);
 		fetchNotes();
 	};
@@ -37,7 +37,7 @@ export default function Notes({ projectId }: any) {
 		setEditContent("");
 	};
 
-	const handleUpdate = async (id: number) => {
+	const handleUpdate = async (id: string) => {
 		if (!editContent.trim()) return;
 
 		await updateNote(id, editContent);

@@ -9,7 +9,7 @@ export default function Project() {
 	const [project, setProject] = useState<any>(null);
 
 	const fetchProject = async () => {
-		const data = await getProjectById(Number(id));
+		const data = await getProjectById(id as string);
 		setProject(data);
 	};
 
